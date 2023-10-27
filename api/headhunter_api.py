@@ -28,7 +28,7 @@ class HeadHunterAPI(JobSearchAPI):
                 formatted_vacancy = {
                     "id": vacancy.get("id", "Не указано"),
                     "name": vacancy.get("name", "Не указано"),
-                    "salary": Vacancy('','', '','').parse_salary(vacancy.get("salary", "Не указано")),
+                    "salary": Vacancy('','', '', '').parse_salary(vacancy.get("salary", "Не указано")),
                     "description": formatted_description,
 
                     "url": vacancy.get("alternate_url", "Не указано"),
@@ -42,5 +42,5 @@ class HeadHunterAPI(JobSearchAPI):
             return []
 
 
-# if __name__ == "__main__":
-#     pprint(HeadHunterAPI().get_vacancies())
+if __name__ == "__main__":
+    pprint(HeadHunterAPI().get_vacancies())

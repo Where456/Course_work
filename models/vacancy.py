@@ -79,19 +79,20 @@ class Vacancy:
     #     for vacancy in vacancies:
     #         print(vacancy)
 
+
 # print(Vacancy('', '', '', '').filter_vacancies([{
-#         "id": "87790296",
-#         "name": "Фасовщик навогодних подарков",
-#         "salary": {
-#             "from": 1500,
-#             "to": None,
-#             "currency": "BYR",
-#             "gross": False
-#         },
-#         "description": "Требования: Наличие сан.книжки обязательно.\nОбязанности: None",
-#         "url": "https://hh.ru/vacancy/87790296",
-#         "platform": "HeadHunter"
+#     "id": "87790296",
+#     "name": "Фасовщик навогодних подарков",
+#     "salary": {
+#         "from": 1500,
+#         "to": None,
+#         "currency": "BYR",
+#         "gross": False
 #     },
+#     "description": "Требования: Наличие сан.книжки обязательно.\nОбязанности: None",
+#     "url": "https://hh.ru/vacancy/87790296",
+#     "platform": "HeadHunter"
+# },
 #     {
 #         "id": "87907825",
 #         "name": "Преподаватель английского языка",

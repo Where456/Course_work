@@ -9,6 +9,7 @@ from models.vacancy import Vacancy
 hh_api = HeadHunterAPI()
 superjob_api = SuperJobAPI()
 
+
 # Getting job vacancies from different platforms
 # hh_vacancies = hh_api.get_vacancies()
 # superjob_vacancies = superjob_api.get_vacancies()
@@ -37,12 +38,12 @@ def user_interaction():
         superjob_api = SuperJobAPI()
         filtered_vacancies = superjob_api.get_vacancies()
     # pprint(filtered_vacancies)
-    sorted_vacancies = Vacancy.filter_vacancies(filtered_vacancies, filter_words)
-    pprint(sorted_vacancies)
-    top_vacancies = Vacancy.get_top_vacancies(sorted_vacancies, amount)
+    b = Vacancy('', '', '', '')
+    sorted_vacancies = b.filter_vacancies(filtered_vacancies, filter_words)
+    # pprint(sorted_vacancies)
+    top_vacancies = b.get_top_vacancies(sorted_vacancies, amount)
     return top_vacancies
 
 
-
 if __name__ == "__main__":
-    user_interaction()
+    print(user_interaction())
