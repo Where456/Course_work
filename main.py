@@ -4,25 +4,17 @@ from pprint import pprint
 from api.headhunter_api import HeadHunterAPI
 from api.superjob_api import SuperJobAPI
 from data_management.json_saver import JSONSaver
-from models.vacancy import Vacancy
+from data_management.vacancy import Vacancy
+from models.vacancies import Vacancies
 
-hh_api = HeadHunterAPI()
-superjob_api = SuperJobAPI()
+vacancy = Vacancies("Python Developer", "<https://hh.ru/vacancy/123456>", "100 000-150 000 руб.",
+                    "Требования: опыт работы от 3 лет...")
 
-
-# Getting job vacancies from different platforms
-# hh_vacancies = hh_api.get_vacancies()
-# superjob_vacancies = superjob_api.get_vacancies()
-
-# Creating a class instance to work with vacancies
-# vacancy = Vacancy("Python Developer", "<https://hh.ru/vacancy/123456>", "100 000-150 000 руб.",
-#                   "Требования: опыт работы от 3 лет...")
-#
-# # Saving information about vacancies to a file
-# json_saver = JSONSaver()
-# json_saver.add_vacancy(vacancy)
-# json_saver.get_vacancies_by_salary("100 000-150 000 руб.")
-# json_saver.delete_vacancy(vacancy)
+# Saving information about vacancies to a file
+json_saver = JSONSaver()
+json_saver.add_vacancy(vacancy)
+json_saver.get_vacancies_by_salary("100 000-150 000 руб.")
+json_saver.delete_vacancy(vacancy)
 
 
 def user_interaction():
@@ -32,17 +24,14 @@ def user_interaction():
     filtered_vacancies = []
 
     if platform.lower() == 'headhunter':
-        hh_api = HeadHunterAPI()
+        hh_api = HeadHunterAPI(filter_words)
         filtered_vacancies = hh_api.get_vacancies()
     elif platform.lower() == 'superjob':
-        superjob_api = SuperJobAPI()
+        superjob_api = SuperJobAPI(filter_words)
         filtered_vacancies = superjob_api.get_vacancies()
-    # pprint(filtered_vacancies)
-    b = Vacancy('', '', '', '')
-    sorted_vacancies = b.filter_vacancies(filtered_vacancies, filter_words)
-    # pprint(sorted_vacancies)
-    top_vacancies = b.get_top_vacancies(sorted_vacancies, amount)
-    return top_vacancies
+    vacancy = Vacancy(filtered_vacancies, amount, filter_words)
+    sorted_vacancies = vacancy.get_top_vacancies()
+    return pprint(sorted_vacancies)
 
 
 if __name__ == "__main__":
