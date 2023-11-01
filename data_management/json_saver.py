@@ -11,6 +11,7 @@ class JSONSaver:
     def __str__(self):
         return f"JSONSaver for {self.file_name}"
 
+
     def add_vacancy(self, vacancy):
         """
         Добавляет вакансию в список.
