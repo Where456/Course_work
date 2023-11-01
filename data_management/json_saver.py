@@ -1,10 +1,5 @@
 import json
 
-from models.vacancies import Vacancies
-
-
-# from models.vacancy import Vacancy
-
 
 class JSONSaver:
     def __init__(self):
@@ -13,17 +8,42 @@ class JSONSaver:
         self.load_from_json()
         self.current_id = 1
 
+    def __str__(self):
+        return f"JSONSaver for {self.file_name}"
+
     def add_vacancy(self, vacancy):
+        """
+        Добавляет вакансию в список.
+
+        :param vacancy: Экземпляр вакансии
+        :return: None
+        """
         self.vacancies.append(vars(vacancy))
         self.save_to_json()
 
     def read_vacancy(self, vacancy_id):
+        """
+        Возвращает информацию о вакансии по идентификатору.
+
+        :param vacancy_id: Идентификатор вакансии
+        :return: Информация о вакансии в виде словаря
+        """
         for vacancy in self.vacancies:
             if vacancy.get('id') == vacancy_id:
                 return vacancy
         return None
 
     def update_vacancy(self, vacancy_id, name=None, url=None, salary=None, description=None):
+        """
+        Обновляет информацию о вакансии.
+
+        :param vacancy_id: Идентификатор вакансии
+        :param name: Новое название вакансии (опционально)
+        :param url: Новая ссылка (опционально)
+        :param salary: Новая зарплата (опционально)
+        :param description: Новое описание (опционально)
+        :return: Информация о вакансии после обновления
+        """
         vacancy = self.read_vacancy(vacancy_id)
         if vacancy:
             if salary:
@@ -41,14 +61,32 @@ class JSONSaver:
         return None
 
     def delete_vacancy(self, vacancy):
+        """
+        Удаляет вакансию из списка.
+
+        :param vacancy: Экземпляр вакансии
+        :return: None
+        """
         self.vacancies.remove(vars(vacancy))
         self.save_to_json()
 
     def get_vacancies_by_salary(self, salary_range):
+        """
+        Возвращает список вакансий с указанным диапазоном зарплат.
+
+        :param salary_range: Диапазон зарплат (например, "100 000-150 000 руб.")
+        :return: Список вакансий
+        """
         filtered_vacancies = [v for v in self.vacancies if v['salary'] == salary_range]
         return filtered_vacancies
 
     def parse_salary(self, salary_str):
+        """
+        Разбирает строку с информацией о зарплате и возвращает словарь.
+
+        :param salary_str: Строка с информацией о зарплате
+        :return: Словарь с информацией о зарплате
+        """
         parts = salary_str.split(' - ')
         if len(parts) == 2:
             currency = "rub"
@@ -58,26 +96,20 @@ class JSONSaver:
         return None
 
     def save_to_json(self):
+        """
+        Сохраняет вакансии в формате JSON.
+
+        :return: None
+        """
         with open(self.file_name, 'w') as file:
             json.dump(self.vacancies, file)
 
     def load_from_json(self):
+        """
+        Загружает вакансии из JSON
+        """
         try:
             with open(self.file_name, 'r') as file:
                 self.vacancies = json.load(file)
         except FileNotFoundError:
             self.vacancies = []
-
-
-# vacancy = Vacancies("Python Developer", "https://hh.ru/vacancy/123456", "100 000-150 000 руб.", "Требования: опыт работы от 3 лет...")
-#
-# # Создаем экземпляр JSONSaver
-# json_saver = JSONSaver()
-#
-# # Добавляем вакансию
-# json_saver.add_vacancy(vacancy)
-#
-# # Получаем вакансии по зарплате
-# filtered_vacancies = json_saver.get_vacancies_by_salary("100 000-150 000 руб.")
-# print("Vacancies by salary:")
-# print(filtered_vacancies)

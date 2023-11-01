@@ -17,6 +17,12 @@ class HeadHunterAPI(JobSearchAPI):
         data = requests.get("https://api.hh.ru/vacancies", params=params).json()
         formatted_vacancies = []
         for vacancy in data['items']:
+            city = None
+            address = vacancy.get("address")
+            if address is not None:
+                city = address.get("city")
+            if city is None:
+                city = "Не указано"
             description = vacancy.get('snippet', {})
             requirements = description.get("requirement", "Не указано")
             responsibilities = description.get("responsibility", "Не указано")
@@ -31,6 +37,7 @@ class HeadHunterAPI(JobSearchAPI):
                 "salary": vacancy.get("salary", "Не указано"),
                 "description": formatted_description,
                 "url": vacancy.get("alternate_url", "Не указано"),
+                "city": city,
                 "platform": "HeadHunter"
             }
             formatted_vacancies.append(formatted_vacancy)
@@ -39,4 +46,4 @@ class HeadHunterAPI(JobSearchAPI):
 
 
 if __name__ == "__main__":
-    pprint(HeadHunterAPI('Профильное высшее образование').get_vacancies())
+    pprint(HeadHunterAPI('образование').get_vacancies())

@@ -1,5 +1,6 @@
 import json
 import os
+from pprint import pprint
 
 import requests
 from dotenv import load_dotenv
@@ -20,16 +21,25 @@ class SuperJobAPI(JobSearchAPI):
             'Authorisation': f'Bearer {self._api_key[3:]}',
             'Content-Type': 'application/x-www-form-urlencoded'
         }
+        self.params = {
+            'keywords': self.filter_words
+        }
         self.response = self.authenticate()
 
     def authenticate(self):
-        return requests.get('https://api.superjob.ru/2.0/vacancies/', headers=self.headers).text
+        return requests.get('https://api.superjob.ru/2.0/vacancies/', headers=self.headers, params=self.params).text
 
     def get_vacancies(self):
         vacancies = json.loads(self.response)
         formatted_vacancies = []
 
         for vacancy in vacancies["objects"]:
+            city = "Не указано"
+            address = vacancy.get('address')
+            if address is not None:
+                city_parts = address.split(',')
+                if len(city_parts) > 0:
+                    city = city_parts[0].strip()
             currency = vacancy.get("currency", "Не указано")
             payment_from = vacancy.get("payment_from", "Не указано")
             payment_to = vacancy.get("payment_to", "Не указано")
@@ -43,13 +53,15 @@ class SuperJobAPI(JobSearchAPI):
                 'name': vacancy.get('profession', 'Не указано'),
                 'salary': formatted_salary,
                 'description': vacancy.get('candidat', 'Не указано'),
+                'city': city,
                 'id': vacancy.get('id', 'Не указано'),
                 'alternate_url': vacancy.get('link', 'Не указано'),
                 'platform': 'SuperJob'
             }
 
-            if any(keyword.lower() in formatted_vacancy['description'].lower() or keyword.lower() in
-                   formatted_vacancy['name'].lower() for keyword in self.filter_words):
-                formatted_vacancies.append(formatted_vacancy)
+            formatted_vacancies.append(formatted_vacancy)
 
-        return formatted_vacancies
+        return pprint(formatted_vacancies)
+
+
+# print(SuperJobAPI('образование').get_vacancies())
